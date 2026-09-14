@@ -135,20 +135,11 @@
   display: none;
 }
 
+/* Hide the native cursor and show the cigarette face only over elements
+   marked with [data-cursor-face]. Everywhere else the normal cursor shows. */
 @media (pointer: fine) {
-  html,
-  body,
-  body * {
-    cursor: none !important;
-  }
-
-  a,
-  button,
-  [role="button"],
-  input,
-  textarea,
-  select,
-  label {
+  [data-cursor-face],
+  [data-cursor-face] * {
     cursor: none !important;
   }
 

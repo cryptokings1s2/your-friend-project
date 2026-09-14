@@ -146,14 +146,14 @@ export function WhitelistForm({ onDone }: { onDone?: () => void }) {
         {errors.xCommentLink && <p className="text-xs text-destructive">{errors.xCommentLink}</p>}
       </div>
 
-      <div className="border-2 border-secondary bg-muted p-4">
+      <div data-cursor-face className="border-2 border-secondary bg-muted p-4">
         <a
-          href="https://x.com/SaudisARC"
+          href="https://x.com/arcsultans"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 font-display text-[10px] font-bold text-accent hover:text-primary"
         >
-          Follow @SaudisARC on X
+          Follow @ARCSultans on X
           <ExternalLink className="h-3.5 w-3.5" />
         </a>
         <div className="mt-3 flex items-start gap-2.5">
@@ -164,14 +164,14 @@ export function WhitelistForm({ onDone }: { onDone?: () => void }) {
             className="mt-0.5"
           />
           <Label htmlFor="followed" className="font-display text-[9px] leading-5 font-normal">
-            I'VE FOLLOWED @SAUDISARC ON X
+            I'VE FOLLOWED @ARCSultans ON X
           </Label>
         </div>
       </div>
 
       {errors.form && <p className="text-sm text-destructive">{errors.form}</p>}
 
-      <Button type="submit" disabled={!canSubmit} className="h-12 w-full border-b-4 border-secondary font-display text-xs font-bold shadow-none active:translate-y-1 active:border-b-0">
+      <Button type="submit" data-cursor-face disabled={!canSubmit} className="h-12 w-full border-b-4 border-secondary font-display text-xs font-bold shadow-none active:translate-y-1 active:border-b-0">
         {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         Submit
       </Button>

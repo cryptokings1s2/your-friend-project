@@ -11,7 +11,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { WhitelistForm } from "@/components/WhitelistForm";
-import cursorAsset from "@/assets/mixed-cigarette-cursor.gif.asset.json";
 import nft1 from "@/assets/nft-1.jpg";
 import nft2 from "@/assets/nft-2.jpg";
 import nft3 from "@/assets/nft-3.jpg";
@@ -28,7 +27,8 @@ const BG_SLIDES = [
 ] as const;
 
 const CENTER_PREVIEW = "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/layers/arcsultans_mixed_100.gif";
-const CURSOR_IMAGE = cursorAsset.url;
+// Bundled directly in /public so it loads on Vercel and any static host, not only in Lovable preview.
+const CURSOR_IMAGE = "/mixed-cigarette-cursor.png";
 
 const SIDE_FRAMES = [
   { backdrop: "nft-backdrop-ivory", gif: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/layers/arcsultans_arc_backgound_100.gif" },
@@ -79,26 +79,35 @@ function CustomCursor() {
 
   useEffect(() => {
     let facing = 1;
-
-    const render = (x: number, y: number) => {
-      if (!cursorRef.current) return;
-      cursorRef.current.style.transform = `translate3d(${x - 4}px, ${y - 4}px, 0) scaleX(${facing})`;
-      cursorRef.current.style.opacity = "1";
-    };
-
     let lastX = 0;
     let lastY = 0;
+    let overFace = false;
+    const img = cursorRef.current;
+
+    const render = (x: number, y: number, show: boolean) => {
+      if (!img) return;
+      img.style.transform = `translate3d(${x - 6}px, ${y - 6}px, 0) scaleX(${facing})`;
+      img.style.opacity = show ? "1" : "0";
+    };
+
+    // The cigarette face only appears over elements marked with [data-cursor-face]
+    // (the ENTER WHITELIST button, the "I've followed" checkbox, and the Submit button).
     const moveCursor = (event: MouseEvent) => {
       lastX = event.clientX;
       lastY = event.clientY;
-      render(lastX, lastY);
+      const target = event.target as Element | null;
+      overFace = !!target?.closest?.("[data-cursor-face]");
+      render(lastX, lastY, overFace);
     };
-    const hideCursor = () => {
-      if (cursorRef.current) cursorRef.current.style.opacity = "0";
-    };
+
     const flipCursor = () => {
       facing = facing === 1 ? -1 : 1;
-      render(lastX, lastY);
+      if (overFace) render(lastX, lastY, true);
+    };
+
+    const hideCursor = () => {
+      overFace = false;
+      if (img) img.style.opacity = "0";
     };
 
     window.addEventListener("mousemove", moveCursor);
@@ -229,6 +238,7 @@ function Index() {
                   <DialogTrigger asChild>
                     <Button
                       size="lg"
+                      data-cursor-face
                       className="mt-4 h-12 w-full max-w-52 border-0 border-b-8 border-secondary bg-primary px-4 font-display text-xs font-bold text-primary-foreground shadow-none hover:bg-primary/90 active:translate-y-2 active:border-b-0 sm:text-sm"
                     >
                       ENTER WHITELIST
@@ -275,12 +285,12 @@ function Index() {
           <div className="flex items-center gap-3">
             {[
               {
-                href: "https://x.com/SaudisARC",
+                href: "https://x.com/arcsultans",
                 label: "X (Twitter)",
                 icon: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/footer/x-pixel-outline.svg",
               },
               {
-                href: "https://t.me/YOUR_CHANNEL",
+                href: "https://t.me/arcsultans",
                 label: "Telegram",
                 icon: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/footer/telegram-pixel.svg",
               },
