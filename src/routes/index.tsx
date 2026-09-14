@@ -109,12 +109,8 @@ function CustomCursor() {
 
   return (
     <div aria-hidden className="cursor-overlay pointer-events-none fixed inset-0 z-[100]">
-      <img
-        ref={cursorRef}
-        src={CURSOR_IMAGE}
-        alt=""
-        className="absolute left-0 top-0 h-8 w-8 opacity-0 [image-rendering:pixelated]"
-      />
+      <img ref={cursorRef} src={CURSOR_IMAGE} alt="" className="hidden" />
+
       {sparks.map((spark) => (
         <img
           key={spark.id}
