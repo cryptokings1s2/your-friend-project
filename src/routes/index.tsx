@@ -76,50 +76,49 @@ function SideGifPreview({ backdrop, gif, slot }: { backdrop: string; gif: string
 
 function CustomCursor() {
   const cursorRef = useRef<HTMLImageElement>(null);
-  const [sparks, setSparks] = useState<Array<{ id: number; x: number; y: number }>>([]);
 
   useEffect(() => {
-    let nextId = 0;
+    let facing = 1;
 
-    const moveCursor = (event: MouseEvent) => {
+    const render = (x: number, y: number) => {
       if (!cursorRef.current) return;
-      cursorRef.current.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
+      cursorRef.current.style.transform = `translate3d(${x - 4}px, ${y - 4}px, 0) scaleX(${facing})`;
       cursorRef.current.style.opacity = "1";
+    };
+
+    let lastX = 0;
+    let lastY = 0;
+    const moveCursor = (event: MouseEvent) => {
+      lastX = event.clientX;
+      lastY = event.clientY;
+      render(lastX, lastY);
     };
     const hideCursor = () => {
       if (cursorRef.current) cursorRef.current.style.opacity = "0";
     };
-    const showSpark = (event: MouseEvent) => {
-      const id = nextId++;
-      setSparks((current) => [...current, { id, x: event.clientX, y: event.clientY }]);
-      window.setTimeout(() => {
-        setSparks((current) => current.filter((spark) => spark.id !== id));
-      }, 400);
+    const flipCursor = () => {
+      facing = facing === 1 ? -1 : 1;
+      render(lastX, lastY);
     };
 
     window.addEventListener("mousemove", moveCursor);
     document.documentElement.addEventListener("mouseleave", hideCursor);
-    window.addEventListener("click", showSpark);
+    window.addEventListener("click", flipCursor);
     return () => {
       window.removeEventListener("mousemove", moveCursor);
       document.documentElement.removeEventListener("mouseleave", hideCursor);
-      window.removeEventListener("click", showSpark);
+      window.removeEventListener("click", flipCursor);
     };
   }, []);
 
   return (
     <div aria-hidden className="cursor-overlay pointer-events-none fixed inset-0 z-[100]">
-      <img ref={cursorRef} src={CURSOR_IMAGE} alt="" className="hidden" />
-
-      {sparks.map((spark) => (
-        <img
-          key={spark.id}
-          src={SPARK_IMAGE}
-          alt=""
-          className="cursor-spark absolute h-6 w-6"
-          style={{ left: spark.x, top: spark.y }}
-        />
-      ))}
+      <img
+        ref={cursorRef}
+        src={CURSOR_IMAGE}
+        alt=""
+        className="absolute left-0 top-0 h-[42px] w-[42px] opacity-0 [image-rendering:pixelated]"
+      />
     </div>
   );
 }

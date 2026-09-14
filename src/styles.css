@@ -139,7 +139,7 @@
   html,
   body,
   body * {
-    cursor: url("/cigar-cursor.png") 6 6, auto !important;
+    cursor: none !important;
   }
 
   a,
@@ -149,7 +149,7 @@
   textarea,
   select,
   label {
-    cursor: url("/cigar-cursor.png") 6 6, pointer !important;
+    cursor: none !important;
   }
 
   .cursor-overlay {
