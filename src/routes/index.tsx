@@ -112,13 +112,13 @@ function Index() {
 
       {/* Top corner badges — left & right */}
       <div className="pointer-events-none fixed inset-x-0 top-0 z-30 flex items-start justify-between px-4 py-3 sm:px-6 sm:py-4">
-        <div className="border-l border-accent/40 pl-2.5 sm:pl-3">
-          <p className="font-display text-[9px] font-bold uppercase leading-4 text-accent sm:text-[10px]">✦ ARC NETWORK</p>
-          <p className="mt-0.5 font-display text-[8px] uppercase leading-[1.4] text-foreground/70 sm:text-[9px]">
+        <div className="pl-2.5 sm:pl-3">
+          <p className="font-display text-[9px] font-bold uppercase leading-4 text-footer-title sm:text-[10px]">✦ ARC NETWORK</p>
+          <p className="mt-0.5 font-display text-[8px] uppercase leading-[1.4] text-footer-copy/70 sm:text-[9px]">
             DESERTS<br />DYNASTY<br />ONCHAIN
           </p>
         </div>
-        <p className="text-right font-display text-[8px] uppercase leading-4 text-foreground/80 sm:text-[9px]">
+        <p className="text-right font-display text-[8px] uppercase leading-4 text-footer-copy sm:text-[9px]">
           999 SULTANS&nbsp;&nbsp;//&nbsp;&nbsp;ONE THRONE
         </p>
       </div>
@@ -256,31 +256,13 @@ function Index() {
 
       <footer className="relative z-20 w-full shrink-0 border-t-2 border-footer-border bg-footer-surface font-display text-footer-copy">
         <div className="mx-auto grid w-full max-w-[1536px] gap-x-8 gap-y-5 px-5 py-5 sm:px-8 lg:grid-cols-[minmax(190px,1fr)_minmax(360px,2fr)_auto] lg:items-center lg:px-10 lg:py-4">
-          <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-5 lg:contents">
-            <div className="min-w-0">
-              <div className="mb-4 border-l border-footer-divider pl-3 lg:hidden">
-                <p className="text-[9px] font-bold uppercase leading-4 text-footer-title">✦ ARC NETWORK</p>
-                <p className="mt-1 text-[8px] uppercase leading-[1.45] text-muted-foreground">DESERTS<br />DYNASTY<br />ONCHAIN</p>
-              </div>
-              <p className="truncate text-xl font-extrabold leading-none text-footer-title sm:text-2xl">ARCSultans</p>
-              <p className="mt-2 text-[9px] leading-4 text-footer-copy sm:text-[10px]">Mint 16 September 2026 · Arc network</p>
-            </div>
-
-            <p className="text-right text-[8px] uppercase leading-4 text-footer-copy lg:hidden">
-              999 SULTANS&nbsp;&nbsp;//&nbsp;&nbsp;ONE THRONE
-            </p>
+          <div className="min-w-0">
+            <p className="truncate text-xl font-extrabold leading-none text-footer-title sm:text-2xl">ARCSultans</p>
+            <p className="mt-2 text-[9px] leading-4 text-footer-copy sm:text-[10px]">Mint 16 September 2026 · Arc network</p>
           </div>
 
           <div className="min-w-0 lg:px-5">
-            <div className="hidden items-start justify-between border-b border-footer-divider pb-3 lg:flex">
-              <div>
-                <p className="text-[9px] font-bold uppercase leading-4 text-footer-title">✦ ARC NETWORK</p>
-                <p className="mt-1 text-[8px] uppercase leading-[1.45] text-muted-foreground">DESERTS<br />DYNASTY<br />ONCHAIN</p>
-              </div>
-              <p className="text-right text-[8px] uppercase leading-4 text-footer-copy">999 SULTANS&nbsp;&nbsp;//&nbsp;&nbsp;ONE THRONE</p>
-            </div>
-
-            <nav aria-label="Footer navigation" className="mt-1 flex min-w-0 flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[9px] text-footer-copy sm:gap-x-4 lg:mt-3">
+            <nav aria-label="Footer navigation" className="flex min-w-0 flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[9px] text-footer-copy sm:gap-x-4">
               {['Home', 'Lore', 'Roadmap', 'FAQ', 'Whitepaper'].map((label, index) => (
                 <span key={label} className="contents">
                   {index > 0 && <span aria-hidden className="text-footer-divider">|</span>}
