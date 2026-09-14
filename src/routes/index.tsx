@@ -107,7 +107,7 @@ function Index() {
   const isWhitelist = view === "whitelist";
 
   return (
-    <main className="relative h-dvh min-h-[540px] overflow-hidden bg-background selection:bg-accent selection:text-accent-foreground">
+    <main id="top" className="relative flex min-h-dvh flex-col overflow-hidden bg-background selection:bg-accent selection:text-accent-foreground">
       <StateBackground isWhitelist={isWhitelist} />
 
       {/* 4 corner GIF preview boxes — anchored to viewport corners (whitelist state only, lg+) */}
@@ -128,8 +128,8 @@ function Index() {
         </>
       )}
 
-      {/* Content — fills viewport, centered, clears the fixed footer */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-28 pt-5">
+      {/* Content — fills the available viewport above the footer */}
+      <div className="relative z-10 flex min-h-[540px] flex-1 flex-col items-center justify-center px-4 py-5">
         {view === "home" ? (
           <section key="home" className="state-enter mx-auto flex w-full max-w-3xl flex-col items-center justify-center text-center">
             <h1 className="font-display text-4xl font-extrabold text-accent sm:text-6xl">ARCSultans</h1>
@@ -241,41 +241,77 @@ function Index() {
         )}
       </div>
 
-      <footer className="fixed inset-x-0 bottom-0 z-20 w-full px-6 py-5 sm:px-8">
-        <div className="flex w-full items-center justify-between gap-6">
-          <div className="flex flex-col">
-            <span className="font-display text-xl font-extrabold text-white sm:text-2xl">ARCSultans</span>
-            <span className="font-display text-[10px] text-gray-400 sm:text-xs">Mint 16 September 2026 · Arc network</span>
+      <footer className="relative z-20 w-full shrink-0 border-t-2 border-footer-border bg-footer-surface font-display text-footer-copy">
+        <div className="mx-auto grid w-full max-w-[1536px] gap-x-8 gap-y-5 px-5 py-5 sm:px-8 lg:grid-cols-[minmax(190px,1fr)_minmax(360px,2fr)_auto] lg:items-center lg:px-10 lg:py-4">
+          <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-5 lg:contents">
+            <div className="min-w-0">
+              <div className="mb-4 border-l border-footer-divider pl-3 lg:hidden">
+                <p className="text-[9px] font-bold uppercase leading-4 text-footer-title">✦ ARC NETWORK</p>
+                <p className="mt-1 text-[8px] uppercase leading-[1.45] text-muted-foreground">DESERTS<br />DYNASTY<br />ONCHAIN</p>
+              </div>
+              <p className="truncate text-xl font-extrabold leading-none text-footer-title sm:text-2xl">ARCSultans</p>
+              <p className="mt-2 text-[9px] leading-4 text-footer-copy sm:text-[10px]">Mint 16 September 2026 · Arc network</p>
+            </div>
+
+            <p className="text-right text-[8px] uppercase leading-4 text-footer-copy lg:hidden">
+              999 SULTANS&nbsp;&nbsp;//&nbsp;&nbsp;ONE THRONE
+            </p>
           </div>
-          <div className="flex items-center gap-3">
-            {[
-              {
-                href: "https://x.com/arcsultans",
-                label: "X (Twitter)",
-                icon: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/footer/x-pixel-outline.svg",
-              },
-              {
-                href: "https://t.me/arcsultans",
-                label: "Telegram",
-                icon: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/footer/telegram-pixel.svg",
-              },
-              {
-                href: "https://opensea.io/collection/YOUR_COLLECTION",
-                label: "OpenSea",
-                icon: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/footer/opensea-pixel.svg",
-              },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={item.label}
-                className="flex h-11 w-11 items-center justify-center border border-gray-600 bg-black/40 transition-all duration-200 hover:border-accent hover:scale-105"
-              >
-                <img src={item.icon} alt={item.label} className="h-6 w-6 object-contain" />
-              </a>
-            ))}
+
+          <div className="min-w-0 lg:px-5">
+            <div className="hidden items-start justify-between border-b border-footer-divider pb-3 lg:flex">
+              <div>
+                <p className="text-[9px] font-bold uppercase leading-4 text-footer-title">✦ ARC NETWORK</p>
+                <p className="mt-1 text-[8px] uppercase leading-[1.45] text-muted-foreground">DESERTS<br />DYNASTY<br />ONCHAIN</p>
+              </div>
+              <p className="text-right text-[8px] uppercase leading-4 text-footer-copy">999 SULTANS&nbsp;&nbsp;//&nbsp;&nbsp;ONE THRONE</p>
+            </div>
+
+            <nav aria-label="Footer navigation" className="mt-1 flex min-w-0 flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[9px] text-footer-copy sm:gap-x-4 lg:mt-3">
+              {['Home', 'Lore', 'Roadmap', 'FAQ', 'Whitepaper'].map((label, index) => (
+                <span key={label} className="contents">
+                  {index > 0 && <span aria-hidden className="text-footer-divider">|</span>}
+                  <span className={label === 'Home' ? 'text-footer-title' : undefined}>{label}</span>
+                </span>
+              ))}
+            </nav>
+          </div>
+
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-5 border-t border-footer-divider pt-4 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+            <div className="flex items-center gap-2.5">
+              {[
+                {
+                  href: "https://x.com/arcsultans",
+                  label: "X (Twitter)",
+                  icon: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/footer/x-pixel-outline.svg",
+                },
+                {
+                  href: "https://t.me/arcsultans",
+                  label: "Telegram",
+                  icon: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/footer/telegram-pixel.svg",
+                },
+                {
+                  href: "https://opensea.io/collection/YOUR_COLLECTION",
+                  label: "OpenSea",
+                  icon: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/footer/opensea-pixel.svg",
+                },
+              ].map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={item.label}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center border border-footer-icon-border bg-footer-icon transition-colors duration-150 hover:border-footer-title focus-visible:border-footer-title focus-visible:outline-none sm:h-11 sm:w-11"
+                >
+                  <img src={item.icon} alt="" className="h-5 w-5 object-contain sm:h-6 sm:w-6" />
+                </a>
+              ))}
+            </div>
+
+            <p className="border-l border-footer-divider pl-4 text-[8px] uppercase leading-[1.55] text-muted-foreground">
+              999 SULTANS<br />ONE DYNASTY<br />FOREVER ONCHAIN
+            </p>
           </div>
         </div>
       </footer>
