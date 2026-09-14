@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,16 +19,12 @@ import nft5 from "@/assets/nft-5.jpg";
 import nft6 from "@/assets/nft-6.jpg";
 const SLIDES = [nft1, nft2, nft3, nft4, nft5, nft6];
 
-const BG_SLIDES = [
-  "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/backgroundstory/arcsultans-bg-1.png",
-  "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/backgroundstory/arcsultans-bg-2.png",
-  "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/backgroundstory/arcsultans-bg-3.png",
-  "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/backgroundstory/arcsultans-bg-4.png",
-] as const;
+const HOME_BACKGROUND =
+  "https://raw.githubusercontent.com/0xDarkSeidBull/TheSaudisARC/main/backgroundstory/homepage.png";
+const WHITELIST_BACKGROUND =
+  "https://raw.githubusercontent.com/0xDarkSeidBull/TheSaudisARC/main/backgroundstory/whitelistpage.png";
 
 const CENTER_PREVIEW = "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/layers/arcsultans_mixed_100.gif";
-// Bundled directly in /public so it loads on Vercel and any static host, not only in Lovable preview.
-const CURSOR_IMAGE = "/mixed-cigarette-cursor.png";
 
 const SIDE_FRAMES = [
   { backdrop: "nft-backdrop-ivory", gif: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/layers/arcsultans_arc_backgound_100.gif" },
@@ -37,27 +33,24 @@ const SIDE_FRAMES = [
   { backdrop: "nft-backdrop-sand", gif: "https://cdn.jsdelivr.net/gh/0xDarkSeidBull/TheSaudisARC@main/layers/arcsultans_solid_slate_gray_100.gif" },
 ] as const;
 
-function BackgroundSlideshow() {
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => setActive((i) => (i + 1) % BG_SLIDES.length), 5000);
-    return () => clearInterval(id);
-  }, []);
-
+function StateBackground({ isWhitelist }: { isWhitelist: boolean }) {
   return (
     <div aria-hidden className="fixed inset-0 z-0 overflow-hidden">
-      {BG_SLIDES.map((src, i) => (
-        <img
-          key={src}
-          src={src}
-          alt=""
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-in-out ${
-            i === active ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      ))}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/85" />
+      <img
+        src={HOME_BACKGROUND}
+        alt=""
+        className={`absolute inset-0 h-full w-full object-cover object-center [image-rendering:auto] transition-opacity duration-700 ease-in-out ${
+          isWhitelist ? "opacity-0" : "opacity-100"
+        }`}
+      />
+      <img
+        src={WHITELIST_BACKGROUND}
+        alt=""
+        className={`absolute inset-0 h-full w-full object-cover object-center [image-rendering:auto] transition-opacity duration-700 ease-in-out ${
+          isWhitelist ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      <div className="absolute inset-0 bg-background/45" />
     </div>
   );
 }
@@ -69,72 +62,6 @@ function SideGifPreview({ backdrop, gif, slot }: { backdrop: string; gif: string
         src={gif}
         alt={`Animated ARCSultans NFT preview ${slot + 1}`}
         className="aspect-square w-full object-cover mix-blend-multiply [image-rendering:pixelated]"
-      />
-    </div>
-  );
-}
-
-function CustomCursor() {
-  const cursorRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    let facing = 1;
-    let lastX = 0;
-    let lastY = 0;
-    let overFace = false;
-    const img = cursorRef.current;
-
-    const render = (x: number, y: number, show: boolean) => {
-      if (!img) return;
-      img.style.transform = `translate3d(${x - 6}px, ${y - 6}px, 0) scaleX(${facing})`;
-      img.style.opacity = show ? "1" : "0";
-    };
-
-    // The cigarette face only appears over elements marked with [data-cursor-face]
-    // (the ENTER WHITELIST button, the "I've followed" checkbox, and the Submit button).
-    // Hit-test by bounding box so it still works on disabled controls (pointer-events:none).
-    const isOverFace = (x: number, y: number) => {
-      const els = document.querySelectorAll("[data-cursor-face]");
-      for (const el of Array.from(els)) {
-        const r = el.getBoundingClientRect();
-        if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return true;
-      }
-      return false;
-    };
-    const moveCursor = (event: MouseEvent) => {
-      lastX = event.clientX;
-      lastY = event.clientY;
-      overFace = isOverFace(lastX, lastY);
-      render(lastX, lastY, overFace);
-    };
-
-    const flipCursor = () => {
-      facing = facing === 1 ? -1 : 1;
-      if (overFace) render(lastX, lastY, true);
-    };
-
-    const hideCursor = () => {
-      overFace = false;
-      if (img) img.style.opacity = "0";
-    };
-
-    window.addEventListener("mousemove", moveCursor);
-    document.documentElement.addEventListener("mouseleave", hideCursor);
-    window.addEventListener("click", flipCursor);
-    return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      document.documentElement.removeEventListener("mouseleave", hideCursor);
-      window.removeEventListener("click", flipCursor);
-    };
-  }, []);
-
-  return (
-    <div aria-hidden className="cursor-overlay pointer-events-none fixed inset-0 z-[100]">
-      <img
-        ref={cursorRef}
-        src={CURSOR_IMAGE}
-        alt=""
-        className="absolute left-0 top-0 h-[42px] w-[42px] opacity-0 [image-rendering:pixelated]"
       />
     </div>
   );
@@ -165,7 +92,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState(false);
-  const [showWhitelist, setShowWhitelist] = useState(false);
+  const [view, setView] = useState<"home" | "whitelist" | "success">("home");
 
   useEffect(() => {
     const id = setInterval(() => setActive((i) => (i + 1) % SLIDES.length), 3500);
@@ -174,16 +101,17 @@ function Index() {
 
   function handleWhitelistDone() {
     setOpen(false);
-    setShowWhitelist(false);
+    setView("success");
   }
 
+  const isWhitelist = view === "whitelist";
+
   return (
-    <main className="relative h-screen overflow-hidden bg-background selection:bg-accent selection:text-accent-foreground">
-      <BackgroundSlideshow />
-      <CustomCursor />
+    <main className="relative h-dvh min-h-[540px] overflow-hidden bg-background selection:bg-accent selection:text-accent-foreground">
+      <StateBackground isWhitelist={isWhitelist} />
 
       {/* 4 corner GIF preview boxes — anchored to viewport corners (whitelist state only, lg+) */}
-      {showWhitelist && (
+      {isWhitelist && (
         <>
           <div className="fixed left-40 top-20 z-10 hidden h-24 w-24 lg:block">
             <SideGifPreview backdrop={SIDE_FRAMES[0].backdrop} gif={SIDE_FRAMES[0].gif} slot={0} />
@@ -202,22 +130,22 @@ function Index() {
 
       {/* Content — fills viewport, centered, clears the fixed footer */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-28 pt-5">
-        {!showWhitelist ? (
-          <section className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center text-center">
+        {view === "home" ? (
+          <section key="home" className="state-enter mx-auto flex w-full max-w-3xl flex-col items-center justify-center text-center">
             <h1 className="font-display text-4xl font-extrabold text-accent sm:text-6xl">ARCSultans</h1>
             <p className="mt-6 max-w-2xl font-display text-sm leading-7 text-foreground sm:text-lg">
               999 Sultans arriving on ARC. Claim your throne before the gates close.
             </p>
             <Button
               size="lg"
-              onClick={() => setShowWhitelist(true)}
+              onClick={() => setView("whitelist")}
               className="mt-8 h-16 w-full max-w-sm border-0 border-b-8 border-secondary bg-primary px-4 font-display text-sm font-bold text-primary-foreground shadow-none hover:bg-primary/90 active:translate-y-2 active:border-b-0 sm:text-lg"
             >
               Enter Whitelist
             </Button>
           </section>
-        ) : (
-          <section className="mx-auto flex w-full max-w-xl items-center justify-center">
+        ) : view === "whitelist" ? (
+          <section key="whitelist" className="state-enter mx-auto flex w-full max-w-xl items-center justify-center">
             <div className="w-full max-w-md border-4 border-secondary bg-card pixel-shadow">
               <header className="border-b-4 border-secondary bg-muted px-4 py-3 text-center">
                 <h1 className="font-display text-2xl font-extrabold text-accent sm:text-3xl">ARCSultans</h1>
@@ -246,7 +174,6 @@ function Index() {
                   <DialogTrigger asChild>
                     <Button
                       size="lg"
-                      data-cursor-face
                       className="mt-4 h-12 w-full max-w-52 border-0 border-b-8 border-secondary bg-primary px-4 font-display text-xs font-bold text-primary-foreground shadow-none hover:bg-primary/90 active:translate-y-2 active:border-b-0 sm:text-sm"
                     >
                       ENTER WHITELIST
@@ -279,6 +206,36 @@ function Index() {
                 <span>MINT: 16.09.2026</span>
                 <span className="text-accent">SYSTEM READY</span>
               </footer>
+            </div>
+          </section>
+        ) : (
+          <section key="success" className="state-enter mx-auto flex w-full max-w-2xl items-center justify-center text-center">
+            <div className="success-panel relative w-full border-4 border-accent bg-popover/95 px-5 py-8 pixel-shadow sm:px-10 sm:py-10">
+              <span aria-hidden className="absolute left-3 top-3 h-3 w-3 border-l-2 border-t-2 border-accent" />
+              <span aria-hidden className="absolute right-3 top-3 h-3 w-3 border-r-2 border-t-2 border-accent" />
+              <span aria-hidden className="absolute bottom-3 left-3 h-3 w-3 border-b-2 border-l-2 border-accent" />
+              <span aria-hidden className="absolute bottom-3 right-3 h-3 w-3 border-b-2 border-r-2 border-accent" />
+              <div className="mx-auto mb-5 w-fit border-2 border-accent bg-accent/10 px-3 py-2 font-display text-[9px] font-bold text-accent sm:text-[10px]">
+                ✓ DETAILS RECORDED
+              </div>
+              <h1 className="success-title font-display text-3xl font-extrabold text-accent sm:text-5xl">
+                Your Throne Is Reserved.
+              </h1>
+              <p className="mx-auto mt-5 max-w-lg font-display text-[11px] leading-6 text-foreground sm:text-sm">
+                Your details have been recorded. Welcome to the dynasty.
+              </p>
+              <div aria-hidden className="mx-auto my-6 flex items-center justify-center gap-3 text-accent">
+                <span className="h-px w-12 bg-accent/60" />
+                <span className="font-display text-xs">◆</span>
+                <span className="h-px w-12 bg-accent/60" />
+              </div>
+              <Button
+                size="lg"
+                onClick={() => setView("home")}
+                className="h-14 w-full max-w-sm border-0 border-b-8 border-secondary bg-primary px-4 font-display text-[11px] font-bold text-primary-foreground shadow-none hover:bg-primary/90 active:translate-y-2 active:border-b-0 sm:text-sm"
+              >
+                RETURN TO THE KINGDOM
+              </Button>
             </div>
           </section>
         )}

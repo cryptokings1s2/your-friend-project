@@ -125,32 +125,29 @@
   50%, 95% { opacity: 0.3; }
 }
 
-@keyframes cursor-spark {
-  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.7); }
-  60% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.35); }
+@keyframes state-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.cursor-overlay {
-  display: none;
+@keyframes royal-glow {
+  0%, 100% { text-shadow: 0 0 8px color-mix(in oklab, var(--accent) 35%, transparent); }
+  50% { text-shadow: 0 0 16px color-mix(in oklab, var(--accent) 60%, transparent); }
 }
 
-/* Hide the native cursor and show the cigarette face only over elements
-   marked with [data-cursor-face]. Everywhere else the normal cursor shows. */
-@media (pointer: fine) {
-  [data-cursor-face],
-  [data-cursor-face] * {
-    cursor: none !important;
-  }
-
-  .cursor-overlay {
-    display: block;
-  }
+.state-enter {
+  animation: state-enter 520ms ease-out both;
 }
 
-.cursor-spark {
-  animation: cursor-spark 380ms ease-out forwards;
-  transform-origin: center;
+.success-title {
+  animation: royal-glow 2.8s ease-in-out infinite;
+}
+
+.success-panel {
+  background-image:
+    linear-gradient(90deg, color-mix(in oklab, var(--accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in oklab, var(--accent) 8%, transparent) 1px, transparent 1px);
+  background-size: 16px 16px;
 }
 
 @utility crt-screen {

@@ -146,7 +146,7 @@ export function WhitelistForm({ onDone }: { onDone?: () => void }) {
         {errors.xCommentLink && <p className="text-xs text-destructive">{errors.xCommentLink}</p>}
       </div>
 
-      <div data-cursor-face className="border-2 border-secondary bg-muted p-4">
+      <div className="border-2 border-secondary bg-muted p-4">
         <a
           href="https://x.com/arcsultans"
           target="_blank"
@@ -171,7 +171,7 @@ export function WhitelistForm({ onDone }: { onDone?: () => void }) {
 
       {errors.form && <p className="text-sm text-destructive">{errors.form}</p>}
 
-      <Button type="submit" data-cursor-face disabled={!canSubmit} className="h-12 w-full border-b-4 border-secondary font-display text-xs font-bold shadow-none active:translate-y-1 active:border-b-0">
+      <Button type="submit" disabled={!canSubmit} className="h-12 w-full border-b-4 border-secondary font-display text-xs font-bold shadow-none active:translate-y-1 active:border-b-0">
         {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         Submit
       </Button>
