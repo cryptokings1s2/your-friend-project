@@ -110,6 +110,19 @@ function Index() {
     <main id="top" className="relative flex min-h-dvh flex-col overflow-hidden bg-background selection:bg-accent selection:text-accent-foreground">
       <StateBackground isWhitelist={isWhitelist} />
 
+      {/* Top corner badges — left & right */}
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-30 flex items-start justify-between px-4 py-3 sm:px-6 sm:py-4">
+        <div className="border-l border-accent/40 pl-2.5 sm:pl-3">
+          <p className="font-display text-[9px] font-bold uppercase leading-4 text-accent sm:text-[10px]">✦ ARC NETWORK</p>
+          <p className="mt-0.5 font-display text-[8px] uppercase leading-[1.4] text-foreground/70 sm:text-[9px]">
+            DESERTS<br />DYNASTY<br />ONCHAIN
+          </p>
+        </div>
+        <p className="text-right font-display text-[8px] uppercase leading-4 text-foreground/80 sm:text-[9px]">
+          999 SULTANS&nbsp;&nbsp;//&nbsp;&nbsp;ONE THRONE
+        </p>
+      </div>
+
       {/* 4 corner GIF preview boxes — anchored to viewport corners (whitelist state only, lg+) */}
       {isWhitelist && (
         <>
