@@ -92,11 +92,19 @@ function CustomCursor() {
 
     // The cigarette face only appears over elements marked with [data-cursor-face]
     // (the ENTER WHITELIST button, the "I've followed" checkbox, and the Submit button).
+    // Hit-test by bounding box so it still works on disabled controls (pointer-events:none).
+    const isOverFace = (x: number, y: number) => {
+      const els = document.querySelectorAll("[data-cursor-face]");
+      for (const el of Array.from(els)) {
+        const r = el.getBoundingClientRect();
+        if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return true;
+      }
+      return false;
+    };
     const moveCursor = (event: MouseEvent) => {
       lastX = event.clientX;
       lastY = event.clientY;
-      const target = event.target as Element | null;
-      overFace = !!target?.closest?.("[data-cursor-face]");
+      overFace = isOverFace(lastX, lastY);
       render(lastX, lastY, overFace);
     };
 
